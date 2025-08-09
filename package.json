@@ -1,0 +1,22 @@
+{
+  "name": "css-shiritori-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "esbuild src/index.ts --bundle --outfile=dist/index.js",
+    "run": "node dist/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "esbuild": "0.25.8",
+    "ts-node": "^10.9.2"
+  },
+  "volta": {
+    "node": "22.18.0"
+  }
+}
