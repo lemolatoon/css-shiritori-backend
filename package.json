@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "esbuild src/index.ts --bundle --outfile=dist/index.js",
+    "build": "esbuild src/index.ts --platform=node --format=esm --packages=external --bundle --outfile=dist/index.js",
     "run": "node dist/index.js",
     "format": "biome format --write .",
     "check": "biome check .",
@@ -18,10 +18,18 @@
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "2.1.4",
+    "@types/node": "^24.2.1",
     "esbuild": "0.25.8",
     "ts-node": "^10.9.2"
   },
   "volta": {
     "node": "22.18.0"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "puppeteer": "^24.16.0",
+    "socket.io": "^4.8.1",
+    "uuid": "^11.1.0",
+    "zod": "^4.0.17"
   }
 }

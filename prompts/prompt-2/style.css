@@ -1,0 +1,20 @@
+body {
+  background: #e0e5ec;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.neumorphic-btn {
+  border: none;
+  outline: none;
+  width: 150px;
+  height: 60px;
+  border-radius: 10px;
+  background: #e0e5ec;
+  box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+  color: #555;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}

@@ -1,0 +1,33 @@
+body {
+  background-color: #eee;
+  padding: 50px;
+}
+.ribbon {
+  position: relative;
+  background: #e74c3c;
+  color: white;
+  height: 50px;
+  line-height: 50px;
+  padding: 0 20px;
+  font-family: sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+.ribbon::before,
+.ribbon::after {
+  content: '';
+  position: absolute;
+  border-style: solid;
+}
+.ribbon::before {
+  top: 0;
+  left: -25px;
+  border-width: 25px 0 25px 25px;
+  border-color: transparent transparent transparent #e74c3c;
+}
+.ribbon::after {
+  top: 0;
+  right: -50px;
+  border-width: 25px 25px 25px 25px;
+  border-color: #e74c3c #e74c3c #e74c3c transparent;
+}
