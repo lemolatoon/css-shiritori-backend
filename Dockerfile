@@ -72,7 +72,7 @@ WORKDIR /usr/src/app
 
 # package.json をコピーし、本番用の依存関係のみをインストール
 COPY package.json ./
-RUN pnpm install --prod --arch=x64 --platform=linux
+RUN pnpm install --frozen-lockfile --prod
 
 # 'builder' ステージからビルド済みのコードをコピー
 COPY --from=builder /usr/src/app/dist ./dist
