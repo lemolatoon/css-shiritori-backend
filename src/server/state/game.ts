@@ -28,6 +28,7 @@ export const startGame = (
   users.forEach((user, index) => {
     const prompt = prompts[index];
     io.to(user.id).emit("gameStart", prompt);
+    io.to(user.id).emit("updateRoomState", getPublicRoomState(room));
   });
 
   startTurn(io, room);

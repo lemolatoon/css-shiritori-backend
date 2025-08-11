@@ -8,7 +8,7 @@
     "test": "jest --detectOpenHandles",
     "test:coverage": "jest --coverage --detectOpenHandles",
     "build": "esbuild src/index.ts --platform=node --format=esm --packages=external --bundle --outfile=dist/index.js",
-    "run": "node dist/index.js",
+    "start": "node dist/index.js",
     "format": "biome format --write .",
     "check": "biome check .",
     "lint": "biome lint .",
