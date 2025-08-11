@@ -14,7 +14,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile
 
 # アプリケーションのソースコードをすべてコピー
-COPY . .
+COPY src ./src
 
 # package.json で定義されたビルドスクリプトを実行
 RUN pnpm run build
@@ -73,12 +73,11 @@ WORKDIR /usr/src/app
 # package.json をコピーし、本番用の依存関係のみをインストール
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
-RUN pnpm puppeteer browsers install chrome
 
 # 'builder' ステージからビルド済みのコードをコピー
 COPY --from=builder /usr/src/app/dist ./dist
 # copy prompts directory
-COPY --from=builder /usr/src/app/prompts ./prompts
+COPY prompts ./prompts
 
 # Puppeteerは、セキュリティのため非rootユーザーでの実行が推奨されます。
 # pptruser という名前の非rootユーザーを作成し、所有権を設定します。
@@ -90,9 +89,11 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
 # 非rootユーザーで実行
 USER pptruser
 
+RUN pnpm puppeteer browsers install chrome
+
 # アプリケーションが使用するポートを公開します。
 # 必要に応じてポート番号を変更してください。
-EXPOSE 3000
+EXPOSE 4000
 
 # アプリケーションを起動するコマンド
 CMD ["pnpm", "start"]
