@@ -71,7 +71,7 @@ RUN apt-get update \
 WORKDIR /usr/src/app
 
 # package.json をコピーし、本番用の依存関係のみをインストール
-COPY package.json ./
+COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
 
 # 'builder' ステージからビルド済みのコードをコピー
