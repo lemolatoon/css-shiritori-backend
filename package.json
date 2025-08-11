@@ -5,7 +5,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --detectOpenHandles",
+    "test:coverage": "jest --coverage --detectOpenHandles",
     "build": "esbuild src/index.ts --platform=node --format=esm --packages=external --bundle --outfile=dist/index.js",
     "run": "node dist/index.js",
     "format": "biome format --write .",
@@ -18,8 +19,12 @@
   "license": "ISC",
   "devDependencies": {
     "@biomejs/biome": "2.1.4",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.2.1",
     "esbuild": "0.25.8",
+    "jest": "^30.0.5",
+    "socket.io-client": "^4.8.1",
+    "ts-jest": "^29.4.1",
     "ts-node": "^10.9.2"
   },
   "volta": {

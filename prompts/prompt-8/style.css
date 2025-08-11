@@ -15,7 +15,7 @@ body {
 }
 .ribbon::before,
 .ribbon::after {
-  content: '';
+  content: "";
   position: absolute;
   border-style: solid;
 }

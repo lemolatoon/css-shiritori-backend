@@ -1,10 +1,10 @@
-import puppeteer, { Browser } from 'puppeteer';
-import fs from 'fs/promises';
-import path from 'path';
-import { logger } from './logger';
+import * as fs from "node:fs/promises";
+import * as path from "node:path";
+import puppeteer, { type Browser } from "puppeteer";
+import { logger } from "./logger";
 
 let browser: Browser | null = null;
-const PUBLIC_DIR = path.join(process.cwd(), 'public');
+const PUBLIC_DIR = path.join(process.cwd(), "public");
 
 export const initScreenshotService = async (): Promise<void> => {
   try {
@@ -12,11 +12,11 @@ export const initScreenshotService = async (): Promise<void> => {
     await fs.mkdir(PUBLIC_DIR, { recursive: true });
     browser = await puppeteer.launch({
       headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox']
+      args: ["--no-sandbox", "--disable-setuid-sandbox"],
     });
-    logger.info('Puppeteer browser instance initialized.');
+    logger.info("Puppeteer browser instance initialized.");
   } catch (err) {
-    logger.error('Failed to initialize Puppeteer:', err);
+    logger.error("Failed to initialize Puppeteer:", err);
     process.exit(1);
   }
 };
@@ -31,12 +31,12 @@ export const initScreenshotService = async (): Promise<void> => {
 export const generateScreenshot = async (
   html: string,
   css: string,
-  fullOutputPath: `${string}.png`
+  fullOutputPath: `${string}.png`,
 ): Promise<string> => {
   if (!browser) {
     await initScreenshotService();
     if (!browser) {
-      throw new Error('Failed to initialize Puppeteer browser instance.');
+      throw new Error("Failed to initialize Puppeteer browser instance.");
     }
   }
   // 保存先ディレクトリの存在を確認・作成
@@ -45,7 +45,7 @@ export const generateScreenshot = async (
   const page = await browser.newPage();
   try {
     await page.setViewport({ width: 800, height: 600 });
-    
+
     const fullHtml = `
       <!DOCTYPE html>
       <html lang="en">
@@ -60,13 +60,17 @@ export const generateScreenshot = async (
       </html>
     `;
 
-    await page.setContent(fullHtml, { waitUntil: 'networkidle0' });
-    await page.screenshot({ path: fullOutputPath, type: 'png' });
-    
-    // process.cwd() を基準とした相対パスからURLを生成
-    const urlPath = fullOutputPath.replace(process.cwd(), '').replace(/\\/g, '/');
-    return urlPath.startsWith('/public') ? urlPath.substring('/public'.length) : urlPath;
+    await page.setContent(fullHtml, { waitUntil: "networkidle0" });
+    await page.screenshot({ path: fullOutputPath, type: "png" });
 
+    // process.cwd() を基準とした相対パスからURLを生成
+    const urlPath = fullOutputPath
+      .replace(process.cwd(), "")
+      .replace(/\\/g, "/");
+    logger.info(`Screenshot saved to: ${urlPath}`);
+    return urlPath.startsWith("/public")
+      ? urlPath.substring("/public".length)
+      : urlPath;
   } finally {
     await page.close();
   }

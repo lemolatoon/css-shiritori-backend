@@ -19,7 +19,7 @@ body {
   display: none; /* Safari用のマーカー消去 */
 }
 .accordion summary::after {
-  content: '▶';
+  content: "▶";
   position: absolute;
   right: 16px;
   transition: transform 0.2s;

@@ -1,4 +1,4 @@
-import { z } from 'zod';
+import { z } from "zod";
 
 // ====================================================================================
 //  1. Zod スキーマと TypeScript 型定義
@@ -21,7 +21,7 @@ export type User = z.infer<typeof UserSchema>;
  * IN_GAME: ゲームプレイ中
  * RESULTS: 結果鑑賞中
  */
-export const GameStateSchema = z.enum(['LOBBY', 'IN_GAME', 'RESULTS']);
+export const GameStateSchema = z.enum(["LOBBY", "IN_GAME", "RESULTS"]);
 export type GameState = z.infer<typeof GameStateSchema>;
 
 /**
@@ -84,11 +84,10 @@ export type GameResults = z.infer<typeof GameResultsSchema>;
  * 結果鑑賞中に、次にどのステップを表示するかを指示するスキーマ
  */
 export const ShowResultStepSchema = z.object({
-    chainIndex: z.number().int().min(0), // 何番目のお題のチェーンか
-    stepIndex: z.number().int().min(0), // そのチェーンの何番目のステップか
+  chainIndex: z.number().int().min(0), // 何番目のお題のチェーンか
+  stepIndex: z.number().int().min(0), // そのチェーンの何番目のステップか
 });
 export type ShowResultStepPayload = z.infer<typeof ShowResultStepSchema>;
-
 
 // ====================================================================================
 //  2. サーバー -> クライアント のイベント定義 (Server to Client Events)
@@ -133,14 +132,13 @@ export interface ServerToClientEvents {
    * 結果鑑賞がすべて終わり、ロビー（待機画面）に戻ることを指示します。
    */
   lobbyReset: () => void;
-  
+
   /**
    * 何らかのエラーが発生したことをクライアントに通知します。
    * (例: 部屋が存在しない、不正な操作など)
    */
   error: (payload: { message: string }) => void;
 }
-
 
 // ====================================================================================
 //  3. クライアント -> サーバー のイベント定義 (Client to Server Events)
@@ -155,22 +153,31 @@ export interface ClientToServerEvents {
    */
   joinRoom: (
     payload: { roomCode: string; name: string },
-    ack: (response: { success: true; roomState: RoomState } | { success: false; message: string }) => void
+    ack: (
+      response:
+        | { success: true; roomState: RoomState }
+        | { success: false; message: string },
+    ) => void,
   ) => void;
 
   /**
    * ホストがゲームの開始をサーバーに要求します。
    */
-  startGame: () => void;
+  startGame: (
+    ack: (response: {
+      success: boolean;
+      roomState: RoomState | undefined;
+    }) => void,
+  ) => void;
 
   /**
    * プレイヤーが書いたCSSをサーバーに提出します。
    */
   submitCss: (
     payload: SubmitCssPayload,
-    ack: (response: { success: boolean; message: string }) => void
+    ack: (response: { success: boolean; message: string }) => void,
   ) => void;
-  
+
   /**
    * 結果鑑賞画面で、ホストが「次へ」ボタンを押したことをサーバーに通知します。
    */

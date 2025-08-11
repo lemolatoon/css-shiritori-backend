@@ -12,7 +12,9 @@ body {
   height: 60px;
   border-radius: 10px;
   background: #e0e5ec;
-  box-shadow: 9px 9px 16px #a3b1c6, -9px -9px 16px #ffffff;
+  box-shadow:
+    9px 9px 16px #a3b1c6,
+    -9px -9px 16px #ffffff;
   color: #555;
   font-size: 18px;
   font-weight: bold;
