@@ -2,3 +2,4 @@
 /dist
 /prompts/**/*.png
 /coverage
+/public/results
