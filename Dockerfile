@@ -78,7 +78,7 @@ RUN pnpm puppeteer browsers install chrome
 # 'builder' ステージからビルド済みのコードをコピー
 COPY --from=builder /usr/src/app/dist ./dist
 # copy prompts directory
-COPY prompts ./prompts
+COPY --from=builder /usr/src/app/prompts ./prompts
 
 # Puppeteerは、セキュリティのため非rootユーザーでの実行が推奨されます。
 # pptruser という名前の非rootユーザーを作成し、所有権を設定します。
