@@ -73,9 +73,12 @@ WORKDIR /usr/src/app
 # package.json をコピーし、本番用の依存関係のみをインストール
 COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod
+RUN pnpm puppeteer browsers install chrome
 
 # 'builder' ステージからビルド済みのコードをコピー
 COPY --from=builder /usr/src/app/dist ./dist
+# copy prompts directory
+COPY prompts ./prompts
 
 # Puppeteerは、セキュリティのため非rootユーザーでの実行が推奨されます。
 # pptruser という名前の非rootユーザーを作成し、所有権を設定します。
