@@ -64,9 +64,7 @@ export const generateScreenshot = async (
     await page.screenshot({ path: fullOutputPath, type: "png" });
 
     // process.cwd() を基準とした相対パスからURLを生成
-    const urlPath = fullOutputPath
-      .replace(process.cwd(), "")
-      .replace(/\\/g, "/");
+    const urlPath = fullOutputPath.replace(process.cwd(), "").replace(/\\/g, "/");
     logger.info(`Screenshot saved to: ${urlPath}`);
     return urlPath.startsWith("/public")
       ? urlPath.substring("/public".length)

@@ -1,4 +1,5 @@
 import type { Server } from "socket.io";
+import * as path from "node:path";
 import { v4 as uuidv4 } from "uuid";
 import type {
   ClientToServerEvents,
@@ -13,6 +14,15 @@ import { type GameRoom, getPublicRoomState } from "./room";
 
 const TURN_DURATION_SECONDS = 90;
 
+const shuffle = <T>(array: T[]): T[] => {
+  const newArray = [...array];
+  for (let i = newArray.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+  }
+  return newArray;
+};
+
 export const startGame = (
   io: Server<ClientToServerEvents, ServerToClientEvents>,
   room: GameRoom,
@@ -20,17 +30,43 @@ export const startGame = (
   room.gameState = "IN_GAME";
   room.turnNumber = 0;
   room.results = [];
-  const users = Array.from(Object.values(room.users));
-  const prompts = getRandomPrompts(users.length);
+  room.assignments = [];
 
+  const userIds = Object.keys(room.users);
+  const prompts = getRandomPrompts(userIds.length);
+
+  // 1. 結果の器を作成
   room.results = prompts.map((p) => ({ initialPrompt: p, steps: [] }));
 
-  users.forEach((user, index) => {
-    const prompt = prompts[index];
-    io.to(user.id).emit("gameStart", prompt);
-    io.to(user.id).emit("updateRoomState", getPublicRoomState(room));
+  // 2. 割り当て表を作成
+  // まず、ユーザーリストを一度だけシャッフルして、最初のターンの割り当てを決定します。
+  const baseAssignees = shuffle(userIds);
+
+  // ターンごとに割り当てを作成していきます。
+  const assignmentsByTurn: string[][] = [];
+  for (let i = 0; i < userIds.length; i++) {
+    // 毎ターン、リストを1つずつローテーションさせることで、担当者が重複しないようにします。
+    // 例: [A, B, C] -> [B, C, A] -> [C, A, B]
+    const rotatedAssignees = [...baseAssignees.slice(i), ...baseAssignees.slice(0, i)];
+    assignmentsByTurn.push(rotatedAssignees);
+  }
+
+  // 現在の`assignmentsByTurn`は「ターンごとの担当者リスト」になっています。
+  // これを「お題ごとの担当者リスト」に変換（行列の転置）します。
+  room.assignments = assignmentsByTurn[0].map((_, colIndex) => 
+    assignmentsByTurn.map(row => row[colIndex])
+  );
+
+  logger.info(JSON.stringify(room.assignments), "Game assignments created");
+
+  // 3. 最初のお題を配布
+  room.assignments.forEach((assignedUserIds, chainIndex) => {
+    const firstUserId = assignedUserIds[0];
+    const prompt = prompts[chainIndex];
+    io.to(firstUserId).emit("gameStart", prompt);
   });
 
+  io.to(room.roomCode).emit("updateRoomState", getPublicRoomState(room));
   startTurn(io, room);
 };
 
@@ -43,9 +79,14 @@ export const handleCssSubmission = async (
   if (room.gameState !== "IN_GAME" || room.submissions[user.id]) return;
 
   room.submissions[user.id] = css;
+  logger.info(JSON.stringify({ submission: { userId: user.id, cssLength: css.length } }), "CSS submission received");
 
   // 全員が提出したらターンを即時終了
   if (Object.keys(room.submissions).length === Object.keys(room.users).length) {
+    if (room.timerId) {
+      clearInterval(room.timerId);
+      room.timerId = null;
+    }
     await endTurn(io, room);
   }
 };
@@ -80,20 +121,23 @@ const endTurn = async (
   }
   logger.info(`Ending turn ${room.turnNumber} for room ${room.roomCode}`);
 
-  // 現在のターンに対応する結果チェーンを見つける
-  const currentChainIndex = room.turnNumber % room.results.length;
-  const currentChain = room.results[currentChainIndex];
+  const currentTurnIndex = room.turnNumber;
+  const numUsers = Object.keys(room.users).length;
 
-  const users = Array.from(Object.values(room.users));
-  const submissionPromises = users.map(async (user) => {
-    const css = room.submissions[user.id] || ""; // 未提出の場合は空CSS
-    const html = currentChain.initialPrompt.html;
+  // 現在のターンの結果を処理
+  const submissionPromises = room.assignments.map(async (assignedUserIds, chainIndex) => {
+    const userId = assignedUserIds[currentTurnIndex];
+    const user = room.users[userId];
+    if (!user) return; // ユーザーが途中で抜けた場合など
+
+    const css = room.submissions[userId] || ""; // 未提出は空CSS
+    const html = room.results[chainIndex].initialPrompt.html;
+    
     const fileName: `${string}.png` = `${room.roomCode}-${uuidv4()}.png`;
-    const resultImageUrl = await generateScreenshot(html, css, fileName);
-    logger.info(
-      `Generated result image for user ${user.name} (${user.id}): ${resultImageUrl}`,
-    );
-    currentChain.steps.push({
+    const fullOutputPath = path.join(process.cwd(), "public", "results", fileName) as `${string}.png`;
+    const resultImageUrl = await generateScreenshot(html, css, fullOutputPath);
+
+    room.results[chainIndex].steps.push({
       author: user,
       submittedCss: css,
       resultImageUrl,
@@ -101,37 +145,33 @@ const endTurn = async (
   });
 
   await Promise.all(submissionPromises);
-  logger.info(`currentChain.steps: ${JSON.stringify(currentChain.steps)}`);
+  logger.info(`All submissions for turn ${currentTurnIndex} processed.`);
 
-  const totalTurns = Object.keys(room.users).length;
-  if (room.turnNumber + 1 >= totalTurns) {
+  // 次のターンに進むか、ゲームを終了するか
+  const nextTurnIndex = currentTurnIndex + 1;
+  if (nextTurnIndex >= numUsers) {
     // ゲーム終了
     room.gameState = "RESULTS";
     io.to(room.roomCode).emit("gameFinished", { chains: room.results });
     io.to(room.roomCode).emit("updateRoomState", getPublicRoomState(room));
+    logger.info(`Game finished for room ${room.roomCode}`);
   } else {
     // 次のターンへ
-    room.turnNumber++;
-    const nextUsers = Array.from(Object.values(room.users)); // 新しい順序かもしれない
-    nextUsers.forEach((user) => {
-      // 次のお題は、前のターンの結果から
-      const previousStep = room.results[currentChainIndex].steps.find(
-        (s) => s.author.id !== user.id,
-      );
-      logger.info(
-        `Previous step for ${user.name} (${user.id}): ${JSON.stringify(previousStep)}`,
-      );
-      if (previousStep) {
-        const nextPrompt: Prompt = {
-          html: currentChain.initialPrompt.html,
-          targetImageUrl: previousStep.resultImageUrl,
-        };
-        logger.info(
-          `Sending new turn prompt to ${user.name} (${user.id}): ${JSON.stringify(nextPrompt)}`,
-        );
-        io.to(user.id).emit("newTurn", nextPrompt, room.turnNumber, totalTurns);
-      }
+    room.turnNumber = nextTurnIndex;
+
+    // 次のお題を配布
+    room.assignments.forEach((assignedUserIds, chainIndex) => {
+      const nextUserId = assignedUserIds[nextTurnIndex];
+      const previousStep = room.results[chainIndex].steps[currentTurnIndex];
+
+      const nextPrompt: Prompt = {
+        html: room.results[chainIndex].initialPrompt.html,
+        targetImageUrl: previousStep.resultImageUrl,
+      };
+      io.to(nextUserId).emit("newTurn", nextPrompt, room.turnNumber, numUsers);
     });
+    
+    logger.info(`Starting turn ${nextTurnIndex} for room ${room.roomCode}`);
     startTurn(io, room);
   }
 };

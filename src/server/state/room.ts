@@ -17,6 +17,7 @@ export interface GameRoom {
   turnNumber: number;
   submissions: Record<string, string>; // userId -> css
   results: ResultChain[];
+  assignments: string[][]; // assignments[chainIndex][turnIndex] = userId
   timerId: NodeJS.Timeout | null;
 }
 
@@ -50,6 +51,7 @@ export const createRoom = (
     turnNumber: 0,
     submissions: {},
     results: [],
+    assignments: [],
     timerId: null,
   };
   rooms.set(roomCode, newRoom);
