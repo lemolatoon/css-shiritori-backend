@@ -1,0 +1,34 @@
+body {
+  padding: 40px;
+  font-family: sans-serif;
+  background: #f9f9f9;
+}
+.accordion {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  max-width: 500px;
+}
+.accordion summary {
+  list-style: none; /* デフォルトのマーカーを消す */
+  padding: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  position: relative;
+}
+.accordion summary::-webkit-details-marker {
+  display: none; /* Safari用のマーカー消去 */
+}
+.accordion summary::after {
+  content: "▶";
+  position: absolute;
+  right: 16px;
+  transition: transform 0.2s;
+}
+.accordion[open] summary::after {
+  transform: rotate(90deg);
+}
+.accordion p {
+  padding: 0 16px 16px;
+  margin: 0;
+  border-top: 1px solid #ddd;
+}

@@ -1,0 +1,31 @@
+body {
+  background: #2c3e50;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.circle-container {
+  position: relative;
+  width: 250px;
+  height: 250px;
+}
+.circle {
+  position: absolute;
+  border-radius: 50%;
+}
+.c1 {
+  width: 200px;
+  height: 200px;
+  background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+  top: 0;
+  left: 0;
+}
+.c2 {
+  width: 150px;
+  height: 150px;
+  background: linear-gradient(45deg, #84fab0 0%, #8fd3f4 100%);
+  bottom: 0;
+  right: 0;
+  mix-blend-mode: screen;
+}

@@ -1,0 +1,16 @@
+body {
+  background: #1a1a1a;
+  display: grid;
+  place-items: center;
+  height: 100vh;
+  margin: 0;
+}
+.gradient-text {
+  font-family: "Arial Black", sans-serif;
+  font-size: 150px;
+  font-weight: 900;
+  background: linear-gradient(90deg, #f8ff00, #3ad59f);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
