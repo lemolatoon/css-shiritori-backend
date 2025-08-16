@@ -1,5 +1,6 @@
 /node_modules
 /dist
 /prompts/**/*.png
+/prompts/**/target.html
 /coverage
 /public/results

@@ -3,8 +3,44 @@ import * as path from "node:path";
 import puppeteer, { type Browser } from "puppeteer";
 import { logger } from "./logger";
 
+import { writeFile } from "node:fs/promises";
+
 let browser: Browser | null = null;
 const PUBLIC_DIR = path.join(process.cwd(), "public");
+
+const buildInnerHtml = (html: string, css: string): string => {
+    return `
+      <head>
+        <meta charset='utf-8'>
+        <meta http-equiv='Content-Security-Policy'
+              content="
+                default-src 'none';
+                style-src 'unsafe-inline';
+                img-src 'none';
+                font-src 'none';
+                media-src 'none';
+                connect-src 'none';
+                object-src 'none';
+                frame-src 'none';
+                base-uri 'none';
+                form-action 'none';
+              ">
+        <meta name='referrer' content='no-referrer'>
+        <style>
+        body {
+          display: grid;
+          place-items: center;
+          height: 100vh;
+          margin: 0;
+          font-family: sans-serif;
+        }
+        </style>
+        <style>${css}</style>
+      </head>
+      <body>
+        ${html}
+      </body>`;
+};
 
 export const initScreenshotService = async (): Promise<void> => {
   try {
@@ -46,19 +82,29 @@ export const generateScreenshot = async (
   try {
     await page.setViewport({ width: 800, height: 600 });
 
+    const inner = buildInnerHtml(html, css);
+    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(inner);
+
+    // 引用符衝突を避けるため、srcdoc ではなく data:URL を使う
     const fullHtml = `
-      <!DOCTYPE html>
-      <html lang="en">
-      <head>
-          <meta charset="UTF-8">
-          <title>Screenshot</title>
-          <style>${css}</style>
-      </head>
-      <body>
-          ${html}
+      <!doctype html>
+      <html>
+      <head><meta charset="utf-8"></head>
+      <body style="margin:0">
+        <iframe
+          id="css-preview"
+          sandbox
+          referrerpolicy="no-referrer"
+          style="border:0;width:800px;height:600px;display:block;margin:0 auto"
+          src="${dataUrl}">
+        </iframe>
       </body>
-      </html>
-    `;
+      </html>`;
+
+    const outPath = fullOutputPath.replace(".png", ".html");
+
+    await writeFile(outPath, fullHtml, { encoding: "utf8" }); // 上書き保存
+    logger.info("saved:", outPath);
 
     await page.setContent(fullHtml, { waitUntil: "networkidle0" });
     await page.screenshot({ path: fullOutputPath, type: "png" });
