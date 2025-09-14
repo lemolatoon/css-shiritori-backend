@@ -1,15 +1,14 @@
 import * as fs from "node:fs/promises";
+import { writeFile } from "node:fs/promises";
 import * as path from "node:path";
 import puppeteer, { type Browser } from "puppeteer";
 import { logger } from "./logger";
-
-import { writeFile } from "node:fs/promises";
 
 let browser: Browser | null = null;
 const PUBLIC_DIR = path.join(process.cwd(), "public");
 
 const buildInnerHtml = (html: string, css: string): string => {
-    return `
+  return `
       <head>
         <meta charset='utf-8'>
         <meta http-equiv='Content-Security-Policy'
@@ -83,7 +82,7 @@ export const generateScreenshot = async (
     await page.setViewport({ width: 800, height: 600 });
 
     const inner = buildInnerHtml(html, css);
-    const dataUrl = 'data:text/html;charset=utf-8,' + encodeURIComponent(inner);
+    const dataUrl = `data:text/html;charset=utf-8,${encodeURIComponent(inner)}`;
 
     // 引用符衝突を避けるため、srcdoc ではなく data:URL を使う
     const fullHtml = `
