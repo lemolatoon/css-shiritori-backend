@@ -1,0 +1,16 @@
+.parent div {
+  border: 4px solid black;
+  font-size: x-large;
+  margin: 20px;
+  width: 400px;
+  padding: 50px;
+}
+.align-1 {
+  text-align: left;
+}
+.align-2 {
+  text-align: center;
+}
+.align-3 {
+  text-align: right;
+}
