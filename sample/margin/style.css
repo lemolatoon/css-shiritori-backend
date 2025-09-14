@@ -1,0 +1,17 @@
+.wrapper {
+  display: inline-block;
+  border: 3px dashed black;
+  background: gray;
+}
+.box {
+  width: 140px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+  border: 3px solid lightblue;
+  background: white;
+}
+.nm { margin: 0; }
+.wm { margin: 20px; }
+/* 縦方向 横方向 */
+.wmh { margin: 0 24px; }
