@@ -1,0 +1,11 @@
+p {
+    font-size: x-large;
+}
+.color-red {
+    color: red;
+    font-weight: bold;
+}
+.color-purple {
+    color: purple;
+    font-style: italic;
+}
