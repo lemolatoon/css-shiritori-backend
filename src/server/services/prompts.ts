@@ -7,8 +7,8 @@ import { generateScreenshot } from "./screenshot"; // 追記
 const PROMPTS_DIR = path.join(process.cwd(), "prompts");
 const initialPrompts: Prompt[] = [];
 
-export const shotPrompt = async (target: string) => {
-  const promptPath = path.join(PROMPTS_DIR, target);
+export const shotPrompt = async (baseDir: string, target: string) => {
+  const promptPath = path.join(baseDir, target);
   const htmlPath = path.join(promptPath, "index.html");
   const cssPath = path.join(promptPath, "style.css"); // 変更
   const imagePath = path.join(promptPath, "target.png") as `${string}.png`;
@@ -36,7 +36,7 @@ export const loadInitialPrompts = async (): Promise<void> => {
     });
     for (const folder of promptFolders) {
       if (folder.isDirectory()) {
-        await shotPrompt(folder.name);
+        await shotPrompt(PROMPTS_DIR, folder.name);
       }
     }
     logger.info(
