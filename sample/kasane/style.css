@@ -1,0 +1,20 @@
+.kasane-1, .kasane-2 {
+  border: 4px solid black;
+  font-size: x-large;
+  width: 300px;
+  height: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+}
+.kasane-1 {
+  background-color: skyblue;
+  top: 50px;
+  left: 50px;
+}
+.kasane-2 {
+  background-color: yellowgreen;
+  top: 250px;
+  left: 250px;
+}
