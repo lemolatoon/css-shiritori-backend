@@ -1,0 +1,13 @@
+.yoko {
+  display: grid;
+  justify-items: center;
+  grid-auto-flow: column;
+  gap: 20px;
+}
+
+.yoko-inner {
+  font-size: x-large;
+  padding: 50px;
+  background-color: gray;
+  border: 2px solid black;
+}
