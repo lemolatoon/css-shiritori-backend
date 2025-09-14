@@ -1,0 +1,10 @@
+.yoko {
+  display: flex;
+}
+.yoko-inner {
+  margin: auto;
+  font-size: x-large;
+  padding: 50px;
+  background-color: gray;
+  border: 2px solid black;
+}
