@@ -1,0 +1,7 @@
+.shadow {
+    width: 100px;
+    height: 100px;
+    background-color: lightblue;
+    /* <offset-x> <offset-y> <color> */
+    box-shadow: 15px 5px blue;
+}
