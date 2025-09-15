@@ -100,11 +100,6 @@ export const generateScreenshot = async (
       </body>
       </html>`;
 
-    const outPath = fullOutputPath.replace(".png", ".html");
-
-    await writeFile(outPath, fullHtml, { encoding: "utf8" }); // 上書き保存
-    logger.info("saved:", outPath);
-
     await page.setContent(fullHtml, { waitUntil: "networkidle0" });
     await page.screenshot({ path: fullOutputPath, type: "png" });
 
