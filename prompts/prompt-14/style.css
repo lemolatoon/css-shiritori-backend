@@ -1,0 +1,17 @@
+.shadow-card {
+  padding: 24px 28px;
+  width: 320px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 10px 20px gray;
+  border: 1px solid black;
+}
+
+h2 {
+  margin: 0 0 8px;
+}
+
+p {
+  margin: 0;
+  color: gray;
+}
