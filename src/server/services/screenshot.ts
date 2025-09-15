@@ -1,5 +1,4 @@
 import * as fs from "node:fs/promises";
-import { writeFile } from "node:fs/promises";
 import * as path from "node:path";
 import puppeteer, { type Browser } from "puppeteer";
 import { logger } from "./logger";
