@@ -1,0 +1,15 @@
+.icon-wrap {
+  text-align: center;
+}
+.diamond {
+  width: 60px;
+  height: 60px;
+  background: orange;
+  border: 2px solid black;
+  transform: rotate(45deg);
+  margin: 0 auto;
+}
+.text {
+  margin-top: 12px;
+  color: gray;
+}

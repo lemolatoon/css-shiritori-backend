@@ -1,0 +1,8 @@
+.banner {
+  padding: 20px 40px;
+  color: white;
+  background: linear-gradient(to right, purple, pink);
+  border-bottom: 4px solid black;
+  border-radius: 8px;
+  font-weight: bold;
+}

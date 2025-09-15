@@ -1,0 +1,13 @@
+.tabs {
+  display: flex;
+  gap: 12px;
+}
+.tab {
+  padding: 10px 16px;
+  border: 2px solid black;
+  border-radius: 999px;
+  background: white;
+}
+.tab.active {
+  background: linear-gradient(90deg, skyblue, lightblue);
+}

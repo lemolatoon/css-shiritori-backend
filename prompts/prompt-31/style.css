@@ -1,0 +1,20 @@
+.stripe-card {
+  width: 300px;
+  padding: 24px 32px;
+  background: linear-gradient(
+    45deg,
+    lightblue 0 25%,
+    white 25% 50%,
+    lightblue 50% 75%,
+    white 75% 100%
+  );
+  border: 2px solid black;
+  border-radius: 12px;
+}
+h4 {
+  margin: 0 0 8px;
+}
+p {
+  margin: 0;
+  color: gray;
+}

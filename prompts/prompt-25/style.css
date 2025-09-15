@@ -1,0 +1,24 @@
+.stack {
+  position: relative;
+  width: 260px;
+  height: 180px;
+}
+.note {
+  position: absolute;
+  width: 200px;
+  padding: 16px;
+  border: 2px solid black;
+  box-shadow: 2px 2px 0 black;
+}
+.note1 {
+  background: khaki;
+  transform: rotate(-3deg);
+  top: 20px;
+  left: 20px;
+}
+.note2 {
+  background: lightyellow;
+  transform: rotate(3deg);
+  top: 40px;
+  left: 40px;
+}
