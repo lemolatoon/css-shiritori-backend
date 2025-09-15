@@ -31,7 +31,11 @@ RUN npm install -g pnpm
 RUN apt-get update \
     && apt-get install -yq --no-install-recommends \
     ca-certificates \
+    fontconfig \
     fonts-liberation \
+    fonts-noto-cjk \
+    fonts-ipafont-gothic \
+    fonts-ipafont-mincho \
     libasound2 \
     libatk-bridge2.0-0 \
     libatk1.0-0 \
@@ -66,6 +70,7 @@ RUN apt-get update \
     lsb-release \
     wget \
     xdg-utils \
+    && fc-cache -f -v \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /usr/src/app
