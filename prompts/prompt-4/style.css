@@ -9,6 +9,12 @@
   border-radius: 50%;
   border: 2px solid black;
 }
-.red { background: red; }
-.green { background: green; }
-.blue { background: blue; }
+.red {
+  background: red;
+}
+.green {
+  background: green;
+}
+.blue {
+  background: blue;
+}

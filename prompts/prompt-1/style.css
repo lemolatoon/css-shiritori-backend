@@ -1,3 +1,15 @@
-.card { background: lightgray; border: 2px solid black; border-radius: 16px; padding: 24px 32px; width: 300px; text-align: center; }
-h1 { font-size: 24px; }
-p { font-size: 16px; color: gray; }
+.card {
+  background: lightgray;
+  border: 2px solid black;
+  border-radius: 16px;
+  padding: 24px 32px;
+  width: 300px;
+  text-align: center;
+}
+h1 {
+  font-size: 24px;
+}
+p {
+  font-size: 16px;
+  color: gray;
+}
