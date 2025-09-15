@@ -1,0 +1,25 @@
+.yoko {
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+}
+.box {
+  width: 180px;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 10px;
+  background: lightgray;
+  font-size: large;
+}
+.left {
+  text-align: left;
+  background: lightpink;
+}
+.center {
+  text-align: center;
+  background: lightgreen;
+}
+.right {
+  text-align: right;
+  background: lightblue;
+}

@@ -1,29 +1,16 @@
-.accordion {
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  max-width: 500px;
+.table {
+  border-collapse: collapse;
+  width: 520px;
 }
-.accordion summary {
-  list-style: none; /* デフォルトのマーカーを消す */
-  padding: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  position: relative;
+.table th,
+.table td {
+  border: 2px solid black;
+  padding: 8px 12px;
+  text-align: left;
 }
-.accordion summary::-webkit-details-marker {
-  display: none; /* Safari用のマーカー消去 */
+.table thead th {
+  background: gray;
 }
-.accordion summary::after {
-  content: "▶";
-  position: absolute;
-  right: 16px;
-  transition: transform 0.2s;
-}
-.accordion[open] summary::after {
-  transform: rotate(90deg);
-}
-.accordion p {
-  padding: 0 16px 16px;
-  margin: 0;
-  border-top: 1px solid #ddd;
+.table tbody tr:nth-child(even) {
+  background: lightgray;
 }

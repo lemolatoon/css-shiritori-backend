@@ -1,0 +1,8 @@
+.grad-btn {
+  padding: 12px 20px;
+  border: 2px solid black;
+  border-radius: 999px;
+  color: white;
+  background: linear-gradient(135deg, blue, lightblue);
+  font-weight: bold;
+}

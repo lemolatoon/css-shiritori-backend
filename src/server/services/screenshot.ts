@@ -1,5 +1,4 @@
 import * as fs from "node:fs/promises";
-import { writeFile } from "node:fs/promises";
 import * as path from "node:path";
 import puppeteer, { type Browser } from "puppeteer";
 import { logger } from "./logger";
@@ -99,11 +98,6 @@ export const generateScreenshot = async (
         </iframe>
       </body>
       </html>`;
-
-    const outPath = fullOutputPath.replace(".png", ".html");
-
-    await writeFile(outPath, fullHtml, { encoding: "utf8" }); // 上書き保存
-    logger.info("saved:", outPath);
 
     await page.setContent(fullHtml, { waitUntil: "networkidle0" });
     await page.screenshot({ path: fullOutputPath, type: "png" });

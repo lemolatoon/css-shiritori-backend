@@ -1,14 +1,13 @@
 .card {
   background: lightgray;
+  border: 2px solid black;
   border-radius: 16px;
   padding: 24px 32px;
   width: 300px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 h1 {
   font-size: 24px;
-  color: black;
 }
 p {
   font-size: 16px;

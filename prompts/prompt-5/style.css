@@ -1,8 +1,0 @@
-.gradient-text {
-  font-size: 150px;
-  font-weight: 900;
-  background: linear-gradient(90deg, orange, aqua);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-}
