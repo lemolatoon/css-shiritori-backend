@@ -12,7 +12,7 @@ import { getRandomPrompts } from "../services/prompts";
 import { generateScreenshot } from "../services/screenshot";
 import { type GameRoom, getPublicRoomState } from "./room";
 
-const TURN_DURATION_SECONDS = 90;
+const TURN_DURATION_SECONDS = 5 * 60;
 
 const shuffle = <T>(array: T[]): T[] => {
   const newArray = [...array];
