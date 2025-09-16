@@ -12,7 +12,6 @@ import { getRandomPrompts } from "../services/prompts";
 import { generateScreenshot } from "../services/screenshot";
 import { type GameRoom, getPublicRoomState } from "./room";
 
-const TURN_DURATION_SECONDS = 5 * 60;
 
 const shuffle = <T>(array: T[]): T[] => {
   const newArray = [...array];
@@ -102,7 +101,7 @@ const startTurn = (
   room: GameRoom,
 ): void => {
   room.submissions = {};
-  let remainingTime = TURN_DURATION_SECONDS;
+  let remainingTime = room.turnDurationSeconds;
 
   io.to(room.roomCode).emit("timerUpdate", remainingTime);
 

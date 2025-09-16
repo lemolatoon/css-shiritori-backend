@@ -12,6 +12,7 @@ import {
   getRoom,
   getRoomByUserId,
   removeUserFromRoom,
+  updateTimerSettings,
 } from "../state/room";
 
 let resultStep = { chainIndex: 0, stepIndex: -1 };
@@ -103,6 +104,32 @@ export const registerEventHandlers = (
       io.to(room.roomCode).emit("lobbyReset");
       io.to(room.roomCode).emit("updateRoomState", getPublicRoomState(room));
     }
+  });
+
+  socket.on("updateTimerSettings", ({ durationSeconds }, ack) => {
+    const room = getRoomByUserId(socket.id);
+    logger.info(
+      `User ${socket.id} requesting timer update in room: ${room?.roomCode}`,
+    );
+
+    if (!room) {
+      ack({ success: false, message: "Room not found" });
+      return;
+    }
+
+    if (room.hostId !== socket.id) {
+      ack({ success: false, message: "Only the host can change timer settings" });
+      return;
+    }
+
+    const result = updateTimerSettings(room.roomCode, durationSeconds);
+    if (result.success) {
+      // 全クライアントにタイマー設定更新を通知
+      io.to(room.roomCode).emit("timerSettingsUpdated", { durationSeconds });
+      logger.info(`Timer settings updated for room ${room.roomCode}: ${durationSeconds} seconds`);
+    }
+    
+    ack(result);
   });
 
   socket.on("disconnect", async () => {
