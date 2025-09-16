@@ -12,7 +12,6 @@ import { getRandomPrompts } from "../services/prompts";
 import { generateScreenshot } from "../services/screenshot";
 import { type GameRoom, getPublicRoomState } from "./room";
 
-
 const shuffle = <T>(array: T[]): T[] => {
   const newArray = [...array];
   for (let i = newArray.length - 1; i > 0; i--) {

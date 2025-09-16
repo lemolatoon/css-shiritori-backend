@@ -118,7 +118,10 @@ export const registerEventHandlers = (
     }
 
     if (room.hostId !== socket.id) {
-      ack({ success: false, message: "Only the host can change timer settings" });
+      ack({
+        success: false,
+        message: "Only the host can change timer settings",
+      });
       return;
     }
 
@@ -126,9 +129,11 @@ export const registerEventHandlers = (
     if (result.success) {
       // 全クライアントにタイマー設定更新を通知
       io.to(room.roomCode).emit("timerSettingsUpdated", { durationSeconds });
-      logger.info(`Timer settings updated for room ${room.roomCode}: ${durationSeconds} seconds`);
+      logger.info(
+        `Timer settings updated for room ${room.roomCode}: ${durationSeconds} seconds`,
+      );
     }
-    
+
     ack(result);
   });
 

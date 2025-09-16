@@ -140,11 +140,16 @@ export const updateTimerSettings = (
   }
 
   if (room.gameState !== "LOBBY") {
-    return { success: false, message: "Timer settings can only be changed in lobby" };
+    return {
+      success: false,
+      message: "Timer settings can only be changed in lobby",
+    };
   }
 
   room.turnDurationSeconds = durationSeconds;
-  logger.info(`Timer settings updated for room ${roomCode}: ${durationSeconds} seconds`);
+  logger.info(
+    `Timer settings updated for room ${roomCode}: ${durationSeconds} seconds`,
+  );
   return { success: true };
 };
 
