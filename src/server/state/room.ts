@@ -19,6 +19,7 @@ export interface GameRoom {
   results: ResultChain[];
   assignments: string[][]; // assignments[chainIndex][turnIndex] = userId
   timerId: NodeJS.Timeout | null;
+  turnDurationSeconds: number; // ターンの制限時間（秒）
 }
 
 // 全ての部屋を管理するMap
@@ -53,6 +54,7 @@ export const createRoom = (
     results: [],
     assignments: [],
     timerId: null,
+    turnDurationSeconds: 300, // デフォルトは300秒
   };
   rooms.set(roomCode, newRoom);
   return newRoom;
@@ -125,6 +127,30 @@ export const getPublicRoomState = (room: GameRoom): RoomState => {
     hostId: room.hostId,
     gameState: room.gameState,
   };
+};
+
+// タイマー設定を更新する関数
+export const updateTimerSettings = (
+  roomCode: string,
+  durationSeconds: number,
+): { success: boolean; message?: string } => {
+  const room = getRoom(roomCode);
+  if (!room) {
+    return { success: false, message: "Room not found" };
+  }
+
+  if (room.gameState !== "LOBBY") {
+    return {
+      success: false,
+      message: "Timer settings can only be changed in lobby",
+    };
+  }
+
+  room.turnDurationSeconds = durationSeconds;
+  logger.info(
+    `Timer settings updated for room ${roomCode}: ${durationSeconds} seconds`,
+  );
+  return { success: true };
 };
 
 export const TEST_ONLY = {
