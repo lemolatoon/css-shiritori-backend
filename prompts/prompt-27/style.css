@@ -1,0 +1,12 @@
+.title-wrap {
+  width: 320px;
+}
+.title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.underline {
+  height: 4px;
+  background: linear-gradient(to right, orange, yellow);
+  border-radius: 999px;
+}

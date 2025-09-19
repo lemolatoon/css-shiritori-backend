@@ -1,0 +1,12 @@
+.loader {
+  width: 64px;
+  height: 64px;
+  border: 8px solid lightgray;
+  border-top-color: blue;
+  border-radius: 50%;
+}
+.loader-label {
+  margin-top: 8px;
+  color: gray;
+  text-align: center;
+}

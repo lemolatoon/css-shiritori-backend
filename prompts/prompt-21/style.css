@@ -1,0 +1,18 @@
+.ticket {
+  width: 320px;
+  padding: 16px 20px;
+  background: lightyellow;
+  border: 2px solid black;
+  border-radius: 12px;
+  text-align: center;
+}
+.cut-line {
+  border-top: 2px dashed gray;
+  margin: 12px 0;
+}
+.row {
+  font-weight: bold;
+}
+.bottom {
+  color: gray;
+}
