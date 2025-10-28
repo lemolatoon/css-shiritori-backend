@@ -89,7 +89,7 @@ RUN groupadd -r pptruser && useradd -r -g pptruser -G audio,video pptruser \
 # 非rootユーザーで実行
 USER pptruser
 
-RUN pnpm puppeteer browsers install chromium
+RUN pnpm puppeteer browsers install chrome
 
 # アプリケーションが使用するポートを公開します。
 # 必要に応じてポート番号を変更してください。
