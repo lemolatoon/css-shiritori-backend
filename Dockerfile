@@ -1,4 +1,4 @@
-FROM node:22.18.0-slim AS builder
+FROM --platform=$BUILDPLATFORM node:22.18.0-slim AS builder
 
 # pnpmをグローバルにインストール
 RUN npm install -g pnpm
