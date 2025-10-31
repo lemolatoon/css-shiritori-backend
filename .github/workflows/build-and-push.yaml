@@ -2,7 +2,9 @@ name: Build and Push to ghcr.io
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
 
 env:
   REGISTRY: ghcr.io
@@ -38,12 +40,24 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
+      # master ブランチへの push の場合のみ push
       - name: Build and push Docker image
-        id: push
+        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         uses: docker/build-push-action@v4
         with:
           context: .
           push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          platforms: linux/amd64,linux/arm64
+
+      # それ以外（PRや他ブランチ）は build のみ
+      - name: Build Docker image (no push)
+        if: github.ref != 'refs/heads/master' || github.event_name != 'push'
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: false
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           platforms: linux/amd64,linux/arm64
